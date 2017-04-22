@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>edc98367-bfc9-4840-829e-28ed5069dc75</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LD38</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ASmallWorldGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameColors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Building.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\GameModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Goods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\TerritoryGoods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\LandUnit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Outpost.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Place.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Ship.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Territory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Maybe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\GoodsStorage.cs" />
+  </ItemGroup>
+</Project>

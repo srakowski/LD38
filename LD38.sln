@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LD38", "LD38\LD38.shproj", "{EDC98367-BFC9-4840-829E-28ED5069DC75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LD38.DesktopGL", "LD38.DesktopGL\LD38.DesktopGL.csproj", "{07197C1B-7771-4336-AC97-3E2A90EFD57A}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		LD38\LD38.projitems*{07197c1b-7771-4336-ac97-3e2a90efd57a}*SharedItemsImports = 4
+		LD38\LD38.projitems*{edc98367-bfc9-4840-829e-28ed5069dc75}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07197C1B-7771-4336-AC97-3E2A90EFD57A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07197C1B-7771-4336-AC97-3E2A90EFD57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07197C1B-7771-4336-AC97-3E2A90EFD57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07197C1B-7771-4336-AC97-3E2A90EFD57A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
