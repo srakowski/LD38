@@ -24,18 +24,23 @@ namespace LD38.DesktopGL
         protected override void Initialize()
         {
             base.Initialize();
-            _model = GameModel.Dev();
+            Hud.Camera = new Camera(GraphicsDevice);
+            _model = GameModel.Dev(new[] {
+                Content.Load<Texture2D>("sprites/planet1"),
+                Content.Load<Texture2D>("sprites/planet2")
+                });
+            Hud.MiniMap.Initialize(_model);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            Global.FontTexture = Content.Load<Texture2D>("sprites/font");
             Renderer.Initialize(Content, GraphicsDevice);
+            Hud.Init(Content);
         }
 
-        protected override void UnloadContent()
-        {
-        }
+        protected override void UnloadContent() => Content.Unload();
 
         protected override void Update(GameTime gameTime)
         {
@@ -43,12 +48,13 @@ namespace LD38.DesktopGL
                 Exit();
 
             float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            Global.Delta = delta;
 
             _model
-                .HandleScroll(delta);
-            
+                .HandleScroll(delta)
+                .HandleClick(delta, Hud.Camera.ToWorldCoords);
 
-            base.Update(gameTime);
+            Coroutines.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

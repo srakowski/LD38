@@ -12,10 +12,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)ASmallWorldGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameColors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Building.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Eye.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\ClickHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\GameModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Goods.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Scroller.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Hud.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\IClickable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\MiniMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gameplay\ScrollHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\TerritoryGoods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\LandUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Outpost.cs" />
@@ -23,12 +26,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Ship.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\Territory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Coroutine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Coroutines.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Global.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Maybe.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gameplay\GoodsStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Transform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\WaitYieldInstruction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\YieldInstruction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Ship.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Simulation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rendering\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rendering\Renderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rendering\TextSprite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sizes.cs" />
   </ItemGroup>
 </Project>

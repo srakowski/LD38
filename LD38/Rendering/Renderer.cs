@@ -11,33 +11,26 @@ namespace LD38.Rendering
 {
     public static class Renderer
     {
-        private static Camera Camera;
         private static Texture2D Default;
-        private static Texture2D EmptyLandUnit;
-        private static Texture2D SmallTradingShipTexture;
-        private static Texture2D LargeTradingShipTexture;
+        private static Dictionary<string, Texture2D> Textures { get; } = new Dictionary<string, Texture2D>();
 
         internal static void Initialize(ContentManager content, GraphicsDevice graphicsDevice)
         {
-            Camera = new Camera(graphicsDevice);
             Default = content.Load<Texture2D>("sprites/icon");
-            EmptyLandUnit = Default;
-            SmallTradingShipTexture = Default;
-            LargeTradingShipTexture = Default;
+            Textures["sprites/sidebar"] = content.Load<Texture2D>("sprites/sidebar");
+            Textures["sprites/posbox"] = content.Load<Texture2D>("sprites/posbox");
         }
 
         internal static void Render(GameModel model, SpriteBatch sb)
         {
-            Camera.Transform = model.Eye.Transform;
-
-            sb.Begin(blendState: BlendState.NonPremultiplied, transformMatrix: Camera.TransformationMatrix);
+            sb.Begin(blendState: BlendState.NonPremultiplied, transformMatrix: Hud.Camera.TransformationMatrix);
             foreach (var landUnit in model.Places.SelectMany(p => p.LandUnits))
             {
                 sb.Draw(
-                    EmptyLandUnit,
+                    Default,
                     landUnit.Position,
                     null,
-                    GameColors.EmptyLandUnitColor,
+                    landUnit.Color,
                     0f,
                     Sizes.TileOrigin,
                     1f,
@@ -46,20 +39,55 @@ namespace LD38.Rendering
             }
             sb.End();
 
-            sb.Begin(transformMatrix: Camera.TransformationMatrix);
+            sb.Begin(transformMatrix: Hud.Camera.TransformationMatrix);
             foreach (var ship in model.Players.SelectMany(p => p.Ships))
                 sb.Draw(
                     ship.Type == ShipType.LargeTrading
-                        ? LargeTradingShipTexture
-                        : SmallTradingShipTexture,
+                        ? Default
+                        : Default,
                     ship.Position,
                     null,
-                    ship.Owner.Color,
+                    ship.Color,
                     0f,
                     Sizes.TileOrigin,
                     1f,
                     SpriteEffects.None,
                     0f);
+            sb.End();
+
+            sb.Begin(blendState: BlendState.NonPremultiplied,
+                samplerState: SamplerState.PointClamp);
+
+            sb.Draw(Textures[Hud.Underlay.TextureKey],
+                Hud.Underlay.Position,
+                Hud.Underlay.Color);
+
+            var minimapPos = Hud.MiniMap.Position;
+
+            sb.Draw(
+                Default,
+                new Rectangle(minimapPos.ToPoint(), Sizes.MiniMapDims),
+                GameColors.Background);
+
+            sb.Draw(
+                Hud.MiniMap.Texture,
+                minimapPos,
+                Color.White);
+
+            sb.Draw(
+                Textures["sprites/posbox"],
+                minimapPos + MiniMap.WorldToMiniMapCoords(Hud.Camera.Transform.Position - (Sizes.WorldViewportDim / 2)),
+                Color.White);
+
+            foreach (var ship in model.Players.SelectMany(p => p.Ships))
+                sb.Draw(Default,
+                    new Rectangle(
+                        minimapPos.ToPoint() + (MiniMap.WorldToMiniMapCoords(ship.Position) - new Vector2(2, 2)).ToPoint(),
+                        new Point(4, 4)),
+                    ship.Owner.Color);
+
+            Hud.Title.Draw(sb);
+
             sb.End();
         }
     }

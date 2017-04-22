@@ -1,10 +1,11 @@
 ﻿
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LD38.Rendering
 {
-    internal class Camera
+    public class Camera
     {
         public Transform Transform { get; set; } = Transform.Default;
 
@@ -25,5 +26,11 @@ namespace LD38.Rendering
 
         public Vector2 ToWorldCoords(Vector2 coords) =>
             Vector2.Transform(coords, Matrix.Invert(this.TransformationMatrix));
+
+        public Vector2 ToScreenCoords(Vector2 coords) =>
+            Vector2.Transform(coords, this.TransformationMatrix);
+
+        internal void SetPosition(Vector2 pos) =>
+            Transform.Position = pos;
     }
 }
