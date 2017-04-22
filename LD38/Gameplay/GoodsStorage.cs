@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using static Microsoft.Xna.Framework.MathHelper;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace LD38.Gameplay
         public int Quantity
         {
             get => _quantity;
-            set => _quantity = MathHelper.Clamp(value, MinQuantity, MaxQuantity);
+            set => _quantity = Clamp(value, MinQuantity, MaxQuantity);
         }
         public bool HasQuantity => Quantity > 0;
 

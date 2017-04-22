@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LD38.Gameplay;
+using LD38.Rendering;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,27 +10,27 @@ namespace LD38.DesktopGL
     {
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
-        
+        GameModel _model;
+
         public ASmallWorldGame()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = Sizes.ScreenBounds.Width;
+            _graphics.PreferredBackBufferHeight = Sizes.ScreenBounds.Height;
+            IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
         {
             base.Initialize();
+            _model = GameModel.Dev();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Content.Load<Texture2D>("sprites/land");
-            Content.Load<Texture2D>("sprites/pointer");
-            Content.Load<Texture2D>("sprites/ship");
-            Content.Load<Texture2D>("sprites/sidebar");
+            Renderer.Initialize(Content, GraphicsDevice);
         }
 
         protected override void UnloadContent()
@@ -40,7 +42,11 @@ namespace LD38.DesktopGL
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            _model
+                .HandleScroll(delta);
+            
 
             base.Update(gameTime);
         }
@@ -48,7 +54,7 @@ namespace LD38.DesktopGL
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(GameColors.Background);
-            base.Draw(gameTime);
+            Renderer.Render(_model, _spriteBatch);
         }
     }
 }
