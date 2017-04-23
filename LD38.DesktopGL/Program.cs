@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Abyss;
+using System;
 
 namespace LD38.DesktopGL
 {
@@ -13,7 +14,7 @@ namespace LD38.DesktopGL
         [STAThread]
         static void Main()
         {
-            using (var game = new ASmallWorldGame())
+            using (var game = new AbyssGame())
                 game.Run();
         }
     }

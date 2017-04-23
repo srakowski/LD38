@@ -7,9 +7,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LD38", "LD38\LD38.shproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LD38.DesktopGL", "LD38.DesktopGL\LD38.DesktopGL.csproj", "{07197C1B-7771-4336-AC97-3E2A90EFD57A}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Abyss", "Abyss\Abyss.shproj", "{ED0AB824-4C79-4B4C-A44F-4270A4CB49BA}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		LD38\LD38.projitems*{07197c1b-7771-4336-ac97-3e2a90efd57a}*SharedItemsImports = 4
+		Abyss\Abyss.projitems*{07197c1b-7771-4336-ac97-3e2a90efd57a}*SharedItemsImports = 4
+		Abyss\Abyss.projitems*{ed0ab824-4c79-4b4c-a44f-4270a4cb49ba}*SharedItemsImports = 13
 		LD38\LD38.projitems*{edc98367-bfc9-4840-829e-28ed5069dc75}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
