@@ -66,6 +66,8 @@ namespace Abyss.MenuSystem
         
         private bool skipInput = false;
 
+        private TextSprite GameTitle { get; } 
+
         public void HandleInput(InputState input)
         {
             if (input.WasAnyOfTheseKeysPressed(Keys.Enter, Keys.Escape))

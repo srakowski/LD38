@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AbyssGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CargoBay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Cell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Colony.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config.cs" />
@@ -31,14 +32,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\Menu.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\MenuControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\MenuOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menus\ColonyMenus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\CoreMenus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\ShipMenus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\Starting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Planet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlanetStats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ship.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SidebarSystem\SidebarControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Starfield.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stats.cs" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,16 @@ namespace Abyss.Menus
 {
     public static class Common
     {
+        public static string FormatValue(string label, string value)
+        {
+            var formatted = label;
+            value = value.Replace("-", "");
+            var dotsToAdd = 36 - (value.Length + formatted.Length);
+            for (int i = 0; i < dotsToAdd; i++)
+                formatted += ".";
+            return formatted + value;
+        }
+
         public static Menu Todo() => new Menu("TODO", new[]
             {
                 GoBackMenuOption()

@@ -9,14 +9,15 @@ namespace Abyss.Menus
     public static class Starting
     {
         public static Menu MainMenu(GameState gs) =>
-            new Menu("Abyss", new[] {
+            new Menu("Menu", new[] {
                 new MenuOption("Play", mc => mc.PushMenu(PlayerSelect(gs))),
                 new MenuOption("Exit", mc => mc.PopMenu(), isCancel: true)
                 })
             {
-                DataSectionTitle = "A space colonization game",
+                DataSectionTitle = "Abyss",
                 DataSectionText = new []
                 {
+                    "A space colonization game",
                     "created for Ludum Dare 38",
                     "by Shawn Rakowski"
                 }

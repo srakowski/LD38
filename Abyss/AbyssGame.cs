@@ -47,6 +47,7 @@ namespace Abyss
             _menuControl.HandleInput(_input);
             _gs.HandleInput(_input);
             Coroutines.Update(gameTime);
+            //_gs.Update(gameTime);
             _sf.Update(gameTime);
             _menuControl.Update();
             base.Update(gameTime);

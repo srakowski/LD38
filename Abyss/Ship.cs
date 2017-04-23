@@ -16,6 +16,8 @@ namespace Abyss
     {
         public ShipType Type { get; }
 
+        public string TypeName => Type == ShipType.SmallTrading ? "Small trading" : "";
+
         public Vector2 RenderPosition => Position.ToVector2() * Config.CellSize;
 
         public Point Position = Config.ShipEntryPoint;
@@ -28,15 +30,36 @@ namespace Abyss
 
         public GameState GameState { get; }
 
-        public Ship(string name, ShipType shipType, GameState gs)
+        public CargoBay[] CargoBays { get; }
+
+        public Ship(string name, ShipType shipType, GameState gs, int cargoBays)
         {
             Name = name;
             Type = shipType;
             GameState = gs;
+            CargoBays = new CargoBay[cargoBays];
+            for (int i = 0; i < cargoBays; i++)
+                CargoBays[i] = new CargoBay();
         }
 
-        public static Ship Starter(Faction faction, GameState gs) =>
-            new Ship(RandomShipName, ShipType.SmallTrading, gs);
+        public static Ship Starter(Faction faction, GameState gs)
+        {
+            var s = new Ship(RandomShipName, ShipType.SmallTrading, gs, 4);
+
+            s.CargoBays[0].ResourceType = ResourceType.Metal;
+            s.CargoBays[0].Quantity = 50;
+
+            s.CargoBays[1].ResourceType = ResourceType.Organics;
+            s.CargoBays[1].Quantity = 50;
+
+            s.CargoBays[2].ResourceType = ResourceType.Water;
+            s.CargoBays[2].Quantity = 50;
+
+            s.CargoBays[3].ResourceType = ResourceType.Uranium;
+            s.CargoBays[3].Quantity = 50;
+
+            return s;
+        }
 
         public Ship JumpToSector(Sector sector)
         {
@@ -312,5 +335,10 @@ namespace Abyss
 "act",
 "temper",
 };
+
+        internal void JumpToSector(object sector)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

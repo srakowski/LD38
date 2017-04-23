@@ -12,6 +12,10 @@ namespace Abyss
 {
     public class GameState
     {
+        public int Credits { get; set; }
+
+        public Stats Stats { get; set; }
+
         public Camera Camera { get; set; }
 
         public Faction PlayerFaction { get; private set; }
@@ -32,8 +36,36 @@ namespace Abyss
         public GameState(Camera camera) =>
             Camera = camera;
 
+        private Coroutine SimClock { get; set; }
+
+        public IEnumerator Step()
+        {
+            while (true)
+            {
+                var taxRev = PlayerColonies.Sum(s => s.TaxRevenue);
+                Credits += taxRev;
+                var operatingCost = PlayerColonies.Sum(s => s.OperatingCost);
+                Credits -= operatingCost;
+
+                var pop = this.PlayerColonies.Sum(c => c.Population);
+                this.Stats = new Stats(
+                    Credits,
+                    taxRev,
+                    operatingCost,
+                    pop,
+                    this.PlayerColonies.Count(),
+                    this.PlayerShips.Count());
+
+                yield return WaitYieldInstruction.Create(10000);
+            }
+        }
+
         public GameState Initialize(Faction faction)
         {
+            SimClock?.Stop();
+
+            Credits = 20000;
+
             PlayerFaction = faction;
             _playerShips.Clear();
             var starterShip = Ship.Starter(faction, this);
@@ -46,6 +78,9 @@ namespace Abyss
 
             var startingSector = _sectors[Config.R.Next(0, _sectors.Length)];
             starterShip.JumpToSector(startingSector);
+
+            SimClock = new Coroutine(Step());
+            Coroutines.Start(SimClock);
 
             return this;
         }
@@ -93,7 +128,6 @@ namespace Abyss
             Coroutines.Start(new Coroutine(SkipInput()));
         }
 
-
         public GameState JumpToSector(int sectorNumber)
         {
             if ((LoadedSector?.Number ?? -1) == sectorNumber)
@@ -124,6 +158,11 @@ namespace Abyss
             for (int i = 0; i < Config.PlanetTextureCount; i++)
                 PlanetTextures[i] = content.Load<Texture2D>($"sprites/planet{i + 1}");
             return this;
+        }
+
+        internal void JumpToSector(object number)
+        {
+            throw new NotImplementedException();
         }
 
         internal void Render(SpriteBatch sb)
