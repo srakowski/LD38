@@ -4,8 +4,7 @@ using System.Text;
 
 namespace Abyss
 {
-    public class Planet : INamed
+    public class Cell
     {
-        public string Name => "PlanetA";
     }
 }

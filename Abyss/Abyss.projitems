@@ -10,12 +10,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AbyssGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Cell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Colony.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameColors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Delta.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INamed.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Coroutine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Coroutines.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\Maybe.cs" />
@@ -23,13 +27,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\WaitYieldInstruction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Infrastructure\YieldInstruction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IControllable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\Menu.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\MenuControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MenuSystem\MenuOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menus\ColonyMenus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\Common.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Menus\Gameplay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menus\CoreMenus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menus\ShipMenus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menus\Starting.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Planet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ship.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Starfield.cs" />
   </ItemGroup>
 </Project>

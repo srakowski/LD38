@@ -1,21 +1,59 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Abyss.Infrastructure;
+using System.Collections;
 
 namespace Abyss
 {
-    public class Ship : INamed
+    public enum ShipType
     {
+        SmallTrading
+    }
+
+    public class Ship : INamed, IControllable
+    {
+        public ShipType Type { get; }
+
+        public Vector2 RenderPosition => Position.ToVector2() * Config.CellSize;
+
+        public Point Position = new Point(0, 0);
+
         public string Name { get; }
 
-        public Ship(string name) => Name = name;
+        public Sector Sector { get; private set; }
+
+        public Ship(string name, ShipType shipType)
+        {
+            Name = name;
+            Type = shipType;
+        }
 
         public static Ship Starter(Faction faction) =>
-            new Ship(RandomShipName);
+            new Ship(RandomShipName, ShipType.SmallTrading);
 
+        public Ship JumpToSector(Sector sector)
+        {
+            Sector?.RemoveShipe(this);
+            Sector = sector;
+            Sector?.AddShip(this);
+            return this;
+        }
 
-        private static Random rand = new Random(DateTime.Now.Millisecond);
-        public static string RandomShipName => $"the {_firsts[rand.Next(0, _firsts.Length)]} {lasts[rand.Next(0, lasts.Length)]}";
+        public void ActionUp() =>
+            this.Position.Y--;
 
+        public void ActionDown() =>
+            this.Position.Y++;
 
+        public void ActionLeft() =>
+            this.Position.X--;
+
+        public void ActionRight() =>
+            this.Position.X++;
+
+        public static string RandomShipName => $"the {_firsts[Config.R.Next(0, _firsts.Length)]} {lasts[Config.R.Next(0, lasts.Length)]}";
         private static readonly string[] _firsts = new[]
         {
 "slippery",

@@ -18,5 +18,8 @@ namespace Abyss
 
         internal bool WasAnyOfTheseKeysPressed(params Keys[] keys) =>
             keys.Any(key => PrevKBState.IsKeyDown(key) && CurrKBState.IsKeyUp(key));
+
+        internal bool AreAnyOfTheseKeysDown(params Keys[] keys) =>
+            keys.Any(key => CurrKBState.IsKeyDown(key));
     }
 }

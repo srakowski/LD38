@@ -7,7 +7,7 @@ namespace Abyss.MenuSystem
     {
         public string Text { get; }
         public Color Color { get; }
-        public Action<MenuControl> Action { get; }
+        public Action<MenuControl> Action { get; set; }
         public bool IsCancel { get; }
         public bool JustText { get; }
         public MenuOption(string text, Action<MenuControl> action, Color? color = null, bool isCancel = false, bool justText = false)
@@ -19,6 +19,9 @@ namespace Abyss.MenuSystem
             this.JustText = justText;
         }
 
-        internal void Invoke(MenuControl mc) => Action.Invoke(mc);
+        internal void Invoke(MenuControl mc)
+        {
+            if (!JustText) Action.Invoke(mc);
+        }
     }
 }

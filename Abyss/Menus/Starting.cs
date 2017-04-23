@@ -8,7 +8,7 @@ namespace Abyss.Menus
 {
     public static class Starting
     {
-        public static Menu Main(GameState gs) =>
+        public static Menu MainMenu(GameState gs) =>
             new Menu("Abyss", new[] {
                 new MenuOption("Play", mc => mc.PushMenu(PlayerSelect(gs))),
                 new MenuOption("Exit", mc => mc.PopMenu(), isCancel: true)

@@ -11,6 +11,8 @@ namespace Abyss
         private InputState _input;
         private MenuControl _menuControl;
         private SpriteBatch _sb;
+        private Starfield _sf;
+        private GameState _gs;
 
         public AbyssGame()
         {
@@ -25,22 +27,31 @@ namespace Abyss
         {
             base.LoadContent();
             _sb = new SpriteBatch(GraphicsDevice);
+            var cam = new Camera(GraphicsDevice);
+            _sf = new Starfield(Content.Load<Texture2D>("sprites/star"), cam);
+            _gs = new GameState(cam);
+            _gs.LoadContent(Content);
             _menuControl = new MenuControl(
                 Content.Load<Texture2D>("sprites/font"),
-                Menus.Starting.Main(new GameState()));
+                Menus.Starting.MainMenu(_gs));
         }
 
         protected override void Update(GameTime gameTime)
         {
+            Delta.Value = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             _input.Update();
             _menuControl.HandleInput(_input);
+            _gs.HandleInput(_input);
             Coroutines.Update(gameTime);
+            _sf.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(GameColors.Background);
+            _sf.Render(_sb);
+            _gs.Render(_sb);
             _menuControl.Render(_sb);
         }
     }
