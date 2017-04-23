@@ -1,4 +1,5 @@
-﻿using Abyss.MenuSystem;
+﻿using Abyss.Infrastructure;
+using Abyss.MenuSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -32,6 +33,8 @@ namespace Abyss
         protected override void Update(GameTime gameTime)
         {
             _input.Update();
+            _menuControl.HandleInput(_input);
+            Coroutines.Update(gameTime);
             base.Update(gameTime);
         }
 

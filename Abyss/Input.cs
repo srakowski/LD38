@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Abyss
@@ -14,5 +15,8 @@ namespace Abyss
             PrevKBState = CurrKBState;
             CurrKBState = Keyboard.GetState();
         }
+
+        internal bool WasAnyOfTheseKeysPressed(params Keys[] keys) =>
+            keys.Any(key => PrevKBState.IsKeyDown(key) && CurrKBState.IsKeyUp(key));
     }
 }

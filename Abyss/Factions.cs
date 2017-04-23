@@ -3,7 +3,7 @@
     public enum Faction
     {
         Red,
-        Blue,
+        Cyan,
         White,
         Yellow
     }

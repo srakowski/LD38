@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Input;
+using System.Linq;
+using System.Collections;
 
 namespace Abyss.MenuSystem
 {
@@ -41,16 +44,50 @@ namespace Abyss.MenuSystem
         private TextSprite TitleLabel { get; }
 
         private TextSprite[] OptionLabels { get; }
+        
+        private bool skipInput = false;
 
+        public void HandleInput(InputState input)
+        {
+            if (skipInput)
+                return;
+
+            var optionInvoked = false;
+            var options = Menu.Options.ToArray();
+            if (input.WasAnyOfTheseKeysPressed(Keys.D1, Keys.NumPad1) && options.Length > 0) { options[0].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D2, Keys.NumPad2) && options.Length > 1) { options[1].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D3, Keys.NumPad3) && options.Length > 2) { options[2].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D4, Keys.NumPad4) && options.Length > 3) { options[3].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D5, Keys.NumPad5) && options.Length > 4) { options[4].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D6, Keys.NumPad6) && options.Length > 5) { options[5].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D7, Keys.NumPad7) && options.Length > 6) { options[6].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D8, Keys.NumPad8) && options.Length > 7) { options[7].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D9, Keys.NumPad9) && options.Length > 8) { options[8].Invoke(this); optionInvoked = true; }
+            if (input.WasAnyOfTheseKeysPressed(Keys.D0, Keys.NumPad0) && options.Any(o => o.IsCancel)) { options.First(o => o.IsCancel).Invoke(this); optionInvoked = true; }
+            if (optionInvoked)
+            {
+                skipInput = true;
+                Coroutines.Start(new Coroutine(SkipInputForABit()));
+            }
+        }
+
+        public IEnumerator SkipInputForABit()
+        {
+            yield return WaitYieldInstruction.Create(100);
+            skipInput = false;
+        }
+         
         public void Render(SpriteBatch sb)
         {
             Sync();
-            sb.Begin(samplerState: SamplerState.PointClamp);
+            sb.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.Identity * Matrix.CreateScale(2f));
             TitleLabel.Draw(sb, Position);
-            for (int i = 0; i < OptionLabels.Length; i++)
+            int i = 0;
+            foreach (var option in OptionLabels.Where(o => o.Enabled))
             {
-                var drawAt = Position + new Vector2(0, ((i + 1) * OptionLabels[i].CharDim.Y * 1.5f));
-                OptionLabels[i].Draw(sb, drawAt);
+                var drawAt = Position + new Vector2(0, ((i + 1) * option.CharDim.Y * 1.5f));
+                option.Draw(sb, drawAt);
+                i++;
             }
             sb.End();
         }
@@ -58,16 +95,29 @@ namespace Abyss.MenuSystem
         private void Sync()
         {
             TitleLabel.Text = Menu.Title;
+
             for (int i = 0; i < OptionLabels.Length; i++)
                 OptionLabels[i].Enabled = false;
 
             int j = 0;
-            foreach (var option in Menu.Options)
+            foreach (var option in Menu.Options.Where(o => !o.IsCancel))
             {
-                OptionLabels[j].Text = $"&{j + 1}: {option.Text}";
+                if (!option.JustText)
+                    OptionLabels[j].Text = $"{j + 1}:{option.Text}";
+                else
+                    OptionLabels[j].Text = $"[{option.Text}]";
+
                 OptionLabels[j].Enabled = true;
                 OptionLabels[j].Color = option.Color;
                 j++;
+            }
+
+            var cancel = Menu.Options.FirstOrDefault(o => o.IsCancel);
+            if (cancel != null)
+            {
+                OptionLabels[9].Text = $"0:{cancel.Text}";
+                OptionLabels[9].Enabled = true;
+                OptionLabels[9].Color = cancel.Color;
             }
         }
     }
