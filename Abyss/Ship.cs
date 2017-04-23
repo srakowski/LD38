@@ -18,20 +18,25 @@ namespace Abyss
 
         public Vector2 RenderPosition => Position.ToVector2() * Config.CellSize;
 
-        public Point Position = new Point(0, 0);
+        public Point Position = Config.ShipEntryPoint;
 
         public string Name { get; }
 
         public Sector Sector { get; private set; }
 
-        public Ship(string name, ShipType shipType)
+        public object Selected { get; private set; }
+
+        public GameState GameState { get; }
+
+        public Ship(string name, ShipType shipType, GameState gs)
         {
             Name = name;
             Type = shipType;
+            GameState = gs;
         }
 
-        public static Ship Starter(Faction faction) =>
-            new Ship(RandomShipName, ShipType.SmallTrading);
+        public static Ship Starter(Faction faction, GameState gs) =>
+            new Ship(RandomShipName, ShipType.SmallTrading, gs);
 
         public Ship JumpToSector(Sector sector)
         {
@@ -41,17 +46,53 @@ namespace Abyss
             return this;
         }
 
-        public void ActionUp() =>
-            this.Position.Y--;
+        internal void Deselect()
+        {
+            Selected = null;
+        }
 
-        public void ActionDown() =>
-            this.Position.Y++;
+        public void ActionUp()
+        {
+            var newPos = Position;
+            newPos.Y--;
+            TryMove(newPos);
+        }
 
-        public void ActionLeft() =>
-            this.Position.X--;
+        public void ActionDown()
+        {
+            var newPos = Position;
+            newPos.Y++;
+            TryMove(newPos);
+        }
 
-        public void ActionRight() =>
-            this.Position.X++;
+        public void ActionLeft()
+        {
+            var newPos = Position;
+            newPos.X--;
+            TryMove(newPos);
+        }
+
+        public void ActionRight()
+        {
+            var newPos = Position;
+            newPos.X++;
+            TryMove(newPos);
+        }
+
+        private void TryMove(Point newPos)
+        {
+            Selected = null;
+            newPos = new Point(
+                MathHelper.Clamp(newPos.X, 0, Config.SectorWidth - 1),
+                MathHelper.Clamp(newPos.Y, 0, Config.SectorHeight - 1));
+            if (Sector.Cells[newPos.X, newPos.Y].Occupant != null)
+            {
+                Selected = Sector.Cells[newPos.X, newPos.Y].Occupant;
+                GameState.Select(Selected as IControllable);
+                return;
+            }
+            this.Position = newPos;
+        }
 
         public static string RandomShipName => $"the {_firsts[Config.R.Next(0, _firsts.Length)]} {lasts[Config.R.Next(0, lasts.Length)]}";
         private static readonly string[] _firsts = new[]

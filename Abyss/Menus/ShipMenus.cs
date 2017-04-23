@@ -9,30 +9,54 @@ namespace Abyss.Menus
     {
         public static Menu ContextMenu(GameState gs, Ship s)
         {
+            var title = $"Ship[{s.Name}]";
             List<MenuOption> options = new List<MenuOption>();
-            options.Add(new MenuOption("Colonize", mc =>
+            if (s.Selected != null && s.Selected is Planet p)
             {
-                var colony = s.Sector.BeginColonization(gs, s.Position);
-                mc.PushMenu(PlaceColonyMenu(gs, s, colony));
-            }));
+                title = "Planet";
+                if (!p.IsExplored)
+                {
+                    options.Add(new MenuOption("Explore Planet",
+                        mc => p.Explore()));
+                }
+                else if (!p.IsColonized)
+                {
+                    title = "Explored planet";
+                    options.Add(new MenuOption("Colonize Planet",
+                        mc => 
+                        {
+                            s.Deselect();
+                            p.Colonize(gs, () =>
+                            {
+                                mc.PopMenu();
+                            });
+                        }));
+                }
+                options.Add(new MenuOption("Back to ship", mc =>
+                {
+                    s.Deselect();
+                    gs.Select(s);
+                }, isCancel: true));
+            }
+            else if (s.Selected != null && s.Selected is Colony c)
+            {
 
-            var gobackop = Common.GoBackMenuOption;
-            gobackop.Action += new Action<MenuControl>(mc => gs.Select(null));
-            options.Add(gobackop);
-            return new Menu($"Ship[{s.Name}]", options);
+            }
+            else
+            {
+                options.Add(new MenuOption("Jump to sector", Common.PushMenuFromEnumerable(gs, "Sectors", gs.Sectors, (_, sec) => JumpToSector(gs, sec, s))));
+                options.Add(Common.GoBackMenuOption());
+            }
+            return new Menu(title, options, mc => mc.SwapMenus(ContextMenu(gs, s)));
         }
 
-        private static Menu PlaceColonyMenu(GameState gs, Ship s, Colony colony) =>
-            new Menu("Colonize", new[] {
-                new MenuOption("Place", mc => {
-                    s.Sector.PlaceColony(gs, colony);
-                    mc.PopMenu().SwapMenus(ColonyMenus.ContextMenu(gs, colony));
-                    }),
-                new MenuOption("Cancel", mc => {
-                    s.Sector.CancelColony(gs, colony);
-                    gs.Select(s);
-                    mc.PopMenu();
-                    })
-                });
+        private static Action<MenuControl> JumpToSector(GameState gs, Sector sector, Ship s) =>
+            mc =>
+            {
+                mc.PopMenu();
+                gs.JumpToSector(sector.Number);
+                s.JumpToSector(sector);
+                s.Position = Config.ShipEntryPoint;
+            };
     }
 }

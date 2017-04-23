@@ -39,9 +39,10 @@ namespace Abyss.Infrastructure
 
         private void BeginMoveTo(Vector2 pos)
         {
-            _moveTo?.Stop();
-            _moveTo = new Coroutine(MoveTo(pos));
-            Coroutines.Start(_moveTo);
+            Position = pos + new Vector2(160, 0);
+            //_moveTo?.Stop();
+            //_moveTo = new Coroutine(MoveTo(pos));
+            //Coroutines.Start(_moveTo);
         }
 
         public const float MoveSpeed = 0.006f;

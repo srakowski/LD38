@@ -1,5 +1,6 @@
 ﻿using Abyss.Infrastructure;
 using Abyss.MenuSystem;
+using Abyss.SidebarSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,6 +14,7 @@ namespace Abyss
         private SpriteBatch _sb;
         private Starfield _sf;
         private GameState _gs;
+        private SidebarControl _sbc;
 
         public AbyssGame()
         {
@@ -31,6 +33,8 @@ namespace Abyss
             _sf = new Starfield(Content.Load<Texture2D>("sprites/star"), cam);
             _gs = new GameState(cam);
             _gs.LoadContent(Content);
+            _sbc = new SidebarControl();
+            _sbc.LoadContent(Content);
             _menuControl = new MenuControl(
                 Content.Load<Texture2D>("sprites/font"),
                 Menus.Starting.MainMenu(_gs));
@@ -44,6 +48,7 @@ namespace Abyss
             _gs.HandleInput(_input);
             Coroutines.Update(gameTime);
             _sf.Update(gameTime);
+            _menuControl.Update();
             base.Update(gameTime);
         }
 
@@ -52,6 +57,7 @@ namespace Abyss
             GraphicsDevice.Clear(GameColors.Background);
             _sf.Render(_sb);
             _gs.Render(_sb);
+            _sbc.Render(_sb);
             _menuControl.Render(_sb);
         }
     }

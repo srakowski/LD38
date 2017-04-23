@@ -11,34 +11,35 @@ namespace Abyss
 
         public Vector2 RenderPosition => Position.ToVector2() * Config.CellSize;
 
-        public bool Placed { get; internal set; }
+        public Point Position => Planet.Position;
 
-        public Point Position = new Point(0, 0);
+        public Planet Planet { get; }
 
-        public Colony(string name) => Name = name;
+        public Colony(string name, Planet planet)
+        {
+            Name = name;
+            Planet = planet;
+            Planet.Sector.Cells[Planet.Position.X, planet.Position.Y] = new Cell(this);
+        }
 
         public void ActionUp()
         {
-            if (Placed) return;
-            this.Position.Y--;
+            return;
         }
 
         public void ActionDown()
         {
-            if (Placed) return;
-            this.Position.Y++;
+            return;
         }
 
         public void ActionLeft()
         {
-            if (Placed) return;
-            this.Position.X--;
+            return;
         }
 
         public void ActionRight()
         {
-            if (Placed) return;
-            this.Position.X++;
+            return;
         }
     }
 }

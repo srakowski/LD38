@@ -36,7 +36,7 @@ namespace Abyss
         {
             PlayerFaction = faction;
             _playerShips.Clear();
-            var starterShip = Ship.Starter(faction);
+            var starterShip = Ship.Starter(faction, this);
             _playerShips.Add(starterShip);
 
             _playerColonies.Clear();
@@ -50,24 +50,36 @@ namespace Abyss
             return this;
         }
 
-        internal void AddPlayerColony(Colony colony) =>
+        internal void AddPlayerColony(Colony colony)
+        {
             _playerColonies.Add(colony);
+            Controllable = colony;
+        }
 
         private bool _acceptingInput = true;
 
         public void HandleInput(InputState input)
         {
-            if (!_acceptingInput) return;
-            if (Controllable != null)
-            {
-                if (input.AreAnyOfTheseKeysDown(Keys.Up, Keys.W)) { Controllable.ActionUp(); SkipInputForABit(); }
-                if (input.AreAnyOfTheseKeysDown(Keys.Down, Keys.S)) { Controllable.ActionDown(); SkipInputForABit(); }
-                if (input.AreAnyOfTheseKeysDown(Keys.Left, Keys.A)) { Controllable.ActionLeft(); SkipInputForABit(); }
-                if (input.AreAnyOfTheseKeysDown(Keys.Right, Keys.D)) { Controllable.ActionRight(); SkipInputForABit(); }
-            }
-            if (Controllable is Ship ship)
-                if (Vector2.Distance(Camera.Position, ship.RenderPosition) > 100f)
-                    Camera.MoveToLocation(ship.RenderPosition);
+            if (Controllable == null)
+                return;
+
+            if (input.WasAnyOfTheseKeysPressed(Keys.Up, Keys.W)) { Controllable.ActionUp(); SkipInputForABit(); }
+            else if (input.WasAnyOfTheseKeysPressed(Keys.Down, Keys.S)) { Controllable.ActionDown(); SkipInputForABit(); }
+            else if (input.WasAnyOfTheseKeysPressed(Keys.Left, Keys.A)) { Controllable.ActionLeft(); SkipInputForABit(); }
+            else if (input.WasAnyOfTheseKeysPressed(Keys.Right, Keys.D)) { Controllable.ActionRight(); SkipInputForABit(); }
+            //if (_acceptingInput)
+            //{
+            //    if (input.AreAnyOfTheseKeysDown(Keys.Up, Keys.W)) { Controllable.ActionUp(); SkipInputForABit(); }
+            //    else if (input.AreAnyOfTheseKeysDown(Keys.Down, Keys.S)) { Controllable.ActionDown(); SkipInputForABit(); }
+            //    else if (input.AreAnyOfTheseKeysDown(Keys.Left, Keys.A)) { Controllable.ActionLeft(); SkipInputForABit(); }
+            //    else if (input.AreAnyOfTheseKeysDown(Keys.Right, Keys.D)) { Controllable.ActionRight(); SkipInputForABit(); }
+            //}
+
+            if (Controllable == null)
+                return;
+
+            if (Vector2.Distance(Camera.Position, Controllable.RenderPosition) > Config.CameraFollowThreshold)
+                Camera.MoveToLocation(Controllable.RenderPosition);
         }
 
         private void SkipInputForABit()
@@ -75,7 +87,7 @@ namespace Abyss
             _acceptingInput = false;
             IEnumerator SkipInput()
             {
-                yield return WaitYieldInstruction.Create(100);
+                yield return WaitYieldInstruction.Create(Config.InputRepeatDelay);
                 _acceptingInput = true;
             }
             Coroutines.Start(new Coroutine(SkipInput()));
@@ -100,6 +112,7 @@ namespace Abyss
         }
 
         private Dictionary<ShipType, Texture2D> ShipTexturesByType = new Dictionary<ShipType, Texture2D>();
+        private Texture2D[] PlanetTextures = new Texture2D[Config.PlanetTextureCount];
         private Texture2D CellTexture;
         private Texture2D ColonyTexture;
 
@@ -108,6 +121,8 @@ namespace Abyss
             ShipTexturesByType[ShipType.SmallTrading] = content.Load<Texture2D>("sprites/smalltrade");
             CellTexture = content.Load<Texture2D>("sprites/cell");
             ColonyTexture = content.Load<Texture2D>("sprites/colony");
+            for (int i = 0; i < Config.PlanetTextureCount; i++)
+                PlanetTextures[i] = content.Load<Texture2D>($"sprites/planet{i + 1}");
             return this;
         }
 
@@ -120,6 +135,7 @@ namespace Abyss
                 for (int x = 0; x < Config.SectorWidth; x++)
                     for (int y = 0; y < Config.SectorHeight; y++)
                     {
+                        var cell = LoadedSector.Cells[x, y];
                         sb.Draw(CellTexture,
                             Config.CellSize * new Vector2(x, y),
                             null,
@@ -129,6 +145,36 @@ namespace Abyss
                             1f,
                             SpriteEffects.None,
                             0f);
+
+                        switch (cell.Occupant)
+                        {
+                            case Planet p:
+                                var t = PlanetTextures[p.TextureIdx];
+                                sb.Draw(t,
+                                    Config.CellSize * new Vector2(x, y),
+                                    null,
+                                    new Color(Color.White, Controllable == p ? 255 : 100),
+                                    0f,
+                                    t.CenterOrigin(),
+                                    1f,
+                                    SpriteEffects.None,
+                                    0f);
+                                break;
+                            case Colony c:
+                                var u = PlanetTextures[c.Planet.TextureIdx];
+                                sb.Draw(u,
+                                    Config.CellSize * new Vector2(x, y),
+                                    null,
+                                    new Color(Color.White, Controllable == c ? 255 : 100),
+                                    0f,
+                                    u.CenterOrigin(),
+                                    1f,
+                                    SpriteEffects.None,
+                                    0f);
+                                break;
+                            default:
+                                break;
+                        }
                     }
             }
 
@@ -137,7 +183,7 @@ namespace Abyss
                 sb.Draw(ColonyTexture,
                     colony.RenderPosition,
                     null,
-                    Color.White,
+                    new Color(Color.White, Controllable == colony ? 255 : 100),
                     0f,//ship.Rotation,
                     ColonyTexture.CenterOrigin(),
                     1f,
@@ -151,7 +197,7 @@ namespace Abyss
                 sb.Draw(texture,
                     ship.RenderPosition,
                     null,
-                    Color.White,
+                    new Color(Color.White, Controllable == ship ? 255 : 100),
                     0f,//ship.Rotation,
                     texture.CenterOrigin(),
                     1f,

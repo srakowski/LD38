@@ -40,5 +40,10 @@ namespace Abyss.Infrastructure
         /// <returns></returns>
         public static WaitYieldInstruction Create(TimeSpan timespan)
             => new WaitYieldInstruction((float)timespan.TotalMilliseconds);
+
+        internal static object Create(object inputDelay)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

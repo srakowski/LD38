@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Abyss
 {
-    public class Cell
+    public struct Cell
     {
+        public object Occupant { get; }
+        public Cell(object occupant) => Occupant = occupant;
     }
 }
