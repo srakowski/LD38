@@ -9,8 +9,8 @@
     <ProjectGuid>{07197C1B-7771-4336-AC97-3E2A90EFD57A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LD38.DesktopGL</RootNamespace>
-    <AssemblyName>LD38.DesktopGL</AssemblyName>
+    <RootNamespace>Abyss</RootNamespace>
+    <AssemblyName>Abyss</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

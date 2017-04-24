@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LD38.DesktopGL")]
+[assembly: AssemblyTitle("Abyss")]
 [assembly: AssemblyProduct("LD38.DesktopGL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
