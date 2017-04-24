@@ -12,7 +12,7 @@ namespace Abyss
 {
     public class GameState
     {
-        public int Credits { get; set; }
+        public Int64 Credits { get; set; }
 
         public Stats Stats { get; set; }
 
@@ -33,8 +33,11 @@ namespace Abyss
 
         public IControllable Controllable { get; set; }
 
-        public GameState(Camera camera) =>
+        public GameState(Camera camera)
+        {
             Camera = camera;
+            Current = this;
+        }
 
         private Coroutine SimClock { get; set; }
 
@@ -42,29 +45,34 @@ namespace Abyss
         {
             while (true)
             {
-                var taxRev = PlayerColonies.Sum(s => s.TaxRevenue);
-                Credits += taxRev;
-                var operatingCost = PlayerColonies.Sum(s => s.OperatingCost);
-                Credits -= operatingCost;
+                foreach (var colony in PlayerColonies)
+                    colony.Step();
 
-                var pop = this.PlayerColonies.Sum(c => c.Population);
-                this.Stats = new Stats(
-                    Credits,
-                    taxRev,
-                    operatingCost,
-                    pop,
-                    this.PlayerColonies.Count(),
-                    this.PlayerShips.Count());
+                //var taxRev = PlayerColonies.Sum(s => s.TaxRevenue);
+                //Credits += taxRev;
+                ////var operatingCost = PlayerColonies.Sum(s => s.OperatingCost);
+                //Credits -= operatingCost;
 
-                yield return WaitYieldInstruction.Create(10000);
+                //var pop = this.PlayerColonies.Sum(c => c.Population);
+                //this.Stats = new Stats(
+                //    (int)Credits,
+                //    taxRev,
+                //    operatingCost,
+                //    pop,
+                //    this.PlayerColonies.Count(),
+                //    this.PlayerShips.Count());
+
+                yield return WaitYieldInstruction.Create(1000);
             }
         }
+
+        public static GameState Current { get; private set; }
 
         public GameState Initialize(Faction faction)
         {
             SimClock?.Stop();
 
-            Credits = 20000;
+            Credits = 0;
 
             PlayerFaction = faction;
             _playerShips.Clear();
@@ -82,6 +90,7 @@ namespace Abyss
             SimClock = new Coroutine(Step());
             Coroutines.Start(SimClock);
 
+            Current = this;
             return this;
         }
 
@@ -150,19 +159,18 @@ namespace Abyss
         private Texture2D CellTexture;
         private Texture2D ColonyTexture;
 
+        private TextSprite CreditsLabel { get; set; }
+
         public GameState LoadContent(ContentManager content)
         {
             ShipTexturesByType[ShipType.SmallTrading] = content.Load<Texture2D>("sprites/smalltrade");
             CellTexture = content.Load<Texture2D>("sprites/cell");
             ColonyTexture = content.Load<Texture2D>("sprites/colony");
+            Texture2D font = content.Load<Texture2D>("sprites/font");
+            CreditsLabel = new TextSprite(font, "$0");
             for (int i = 0; i < Config.PlanetTextureCount; i++)
                 PlanetTextures[i] = content.Load<Texture2D>($"sprites/planet{i + 1}");
             return this;
-        }
-
-        internal void JumpToSector(object number)
-        {
-            throw new NotImplementedException();
         }
 
         internal void Render(SpriteBatch sb)
@@ -210,6 +218,23 @@ namespace Abyss
                                     1f,
                                     SpriteEffects.None,
                                     0f);
+
+                                CreditsLabel.Text = $"${c.Credits}";
+                                CreditsLabel.Draw(sb, (Config.CellSize * new Vector2(x, y)) + u.CenterOrigin());
+                                break;
+
+                            case Store s:
+                                sb.Draw(ColonyTexture,
+                                    Config.CellSize * new Vector2(x, y),
+                                    null,
+                                    new Color(Color.White, Controllable == s ? 255 : 100),
+                                    0f,
+                                    ColonyTexture.CenterOrigin(),
+                                    1f,
+                                    SpriteEffects.None,
+                                    0f);
+
+
                                 break;
                             default:
                                 break;
@@ -217,18 +242,18 @@ namespace Abyss
                     }
             }
 
-            foreach (var colony in LoadedSector?.ColoniesThisSector ?? Enumerable.Empty<Colony>())
-            {
-                sb.Draw(ColonyTexture,
-                    colony.RenderPosition,
-                    null,
-                    new Color(Color.White, Controllable == colony ? 255 : 100),
-                    0f,//ship.Rotation,
-                    ColonyTexture.CenterOrigin(),
-                    1f,
-                    SpriteEffects.None,
-                    0f);
-            }
+            //foreach (var colony in LoadedSector?.ColoniesThisSector ?? Enumerable.Empty<Colony>())
+            //{
+            //    sb.Draw(ColonyTexture,
+            //        colony.RenderPosition,
+            //        null,
+            //        new Color(Color.White, Controllable == colony ? 255 : 100),
+            //        0f,//ship.Rotation,
+            //        ColonyTexture.CenterOrigin(),
+            //        1f,
+            //        SpriteEffects.None,
+            //        0f);
+            //}
 
             foreach (var ship in LoadedSector?.ShipsInSector ?? Enumerable.Empty<Ship>())
             {

@@ -8,7 +8,7 @@ namespace Abyss
     {
         Empty,
         Water,
-        Metal,
+        Metals,
         Uranium,
         Organics
     }
@@ -20,10 +20,12 @@ namespace Abyss
         Scarce
     }
 
+
+
     public struct PlanetStats
     {
-        public int CostToColonize => 100 + (IsHabitable ? 0 : 20) + (Water == ResourceAvailability.NA ? 100 : 0);
-        public int CostToOperate => 5 + (IsHabitable ? 0 : 2) + (Water == ResourceAvailability.NA ? 5 : 0);
+        public int CostToColonize => Config.CostToColonize;// 100 + (IsHabitable ? 0 : 20) + (Water == ResourceAvailability.NA ? 100 : 0);
+        //public int CostToOperate =>// 10 + (IsHabitable ? 0 : 5) + (Water == ResourceAvailability.NA ? 10 : 0);
 
         public ResourceAvailability Water { get; }
         public ResourceAvailability Metals { get; }

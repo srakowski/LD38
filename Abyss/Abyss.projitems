@@ -44,5 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SidebarSystem\SidebarControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Starfield.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stats.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Store.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Structure.cs" />
   </ItemGroup>
 </Project>

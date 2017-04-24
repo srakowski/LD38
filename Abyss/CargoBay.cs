@@ -12,8 +12,17 @@ namespace Abyss
         public int Quantity
         {
             get { return _quantity; }
-            set { _quantity = value; if (_quantity <= 0) ResourceType = ResourceType.Empty; }
+            set { _quantity = value; if (_quantity <= 0 && detype) ResourceType = ResourceType.Empty; }
         }
 
+        private bool detype = true;
+
+        public CargoBay() { }
+
+        public CargoBay(ResourceType type, bool detype)
+        {
+            this.ResourceType = type;
+            this.detype = detype;
+        }
     }
 }

@@ -79,15 +79,15 @@ namespace Abyss.MenuSystem
             {
                 var options = Menu.Options.ToArray();
                 if (input.WasAnyOfTheseKeysPressed(Keys.D1, Keys.NumPad1) && options.Length > 0) { options[0].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D2, Keys.NumPad2) && options.Length > 1) { options[1].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D3, Keys.NumPad3) && options.Length > 2) { options[2].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D4, Keys.NumPad4) && options.Length > 3) { options[3].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D5, Keys.NumPad5) && options.Length > 4) { options[4].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D6, Keys.NumPad6) && options.Length > 5) { options[5].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D7, Keys.NumPad7) && options.Length > 6) { options[6].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D8, Keys.NumPad8) && options.Length > 7) { options[7].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D9, Keys.NumPad9) && options.Length > 8) { options[8].Invoke(this); }
-                if (input.WasAnyOfTheseKeysPressed(Keys.D0, Keys.NumPad0) && options.Any(o => o.IsCancel)) { options.First(o => o.IsCancel).Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D2, Keys.NumPad2) && options.Length > 1) { options[1].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D3, Keys.NumPad3) && options.Length > 2) { options[2].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D4, Keys.NumPad4) && options.Length > 3) { options[3].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D5, Keys.NumPad5) && options.Length > 4) { options[4].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D6, Keys.NumPad6) && options.Length > 5) { options[5].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D7, Keys.NumPad7) && options.Length > 6) { options[6].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D8, Keys.NumPad8) && options.Length > 7) { options[7].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D9, Keys.NumPad9) && options.Length > 8) { options[8].Invoke(this); }
+                else if (input.WasAnyOfTheseKeysPressed(Keys.D0, Keys.NumPad0) && options.Any(o => o.IsCancel)) { options.First(o => o.IsCancel).Invoke(this); }
             }
         }
 
@@ -106,7 +106,7 @@ namespace Abyss.MenuSystem
         private void RenderOpenMenu(SpriteBatch sb)
         {
             Sync();
-            sb.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.Identity * Matrix.CreateScale(1));
+            sb.Begin(blendState: BlendState.NonPremultiplied, samplerState: SamplerState.PointClamp, transformMatrix: Matrix.Identity * Matrix.CreateScale(1));
             TitleLabel.Draw(sb, Position);
             int i = 0;
             foreach (var option in OptionLabels.Where(o => o.Enabled))
@@ -156,7 +156,7 @@ namespace Abyss.MenuSystem
                     OptionLabels[j].Text = $"<{option.Text}>";
 
                 OptionLabels[j].Enabled = true;
-                OptionLabels[j].Color = option.Color;
+                OptionLabels[j].Color = new Color(option.Color, option.IsEnabled ? 255 : 100);
                 j++;
             }
 

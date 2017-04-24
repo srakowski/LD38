@@ -33,9 +33,10 @@ namespace Abyss
         internal void Explore(GameState gs)
         {
             if (IsExplored) return;
-            if (gs.Credits > 20)
+            if (gs.Credits > Config.CostToSurvey)
             {
-                gs.Credits -= 20;
+                gs.Credits -= Config.CostToSurvey;
+                Config.CostToSurvey *= 2;
                 IsExplored = true;
             }
         }
@@ -43,19 +44,23 @@ namespace Abyss
         internal void Colonize(GameState gs, Ship s,  Action<Colony> ifSuccess = null, Action ifFail = null)
         {
             if (IsColonized) return;
-            if (gs.Credits > this.Stats.CostToColonize &&
-                s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Metal && cb.Quantity >= 10) &&
-                s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Organics && cb.Quantity >= 10) &&
-                s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Uranium && cb.Quantity >= 10) &&
-                s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Water && cb.Quantity >= 10))
+            if (gs.Credits > this.Stats.CostToColonize) // &&
+                //s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Metals && cb.Quantity >= 10) &&
+                //s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Organics && cb.Quantity >= 10) &&
+                //s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Uranium && cb.Quantity >= 10) &&
+                //s.CargoBays.Any(cb => cb.ResourceType == ResourceType.Water && cb.Quantity >= 10))
             {
                 gs.Credits -= this.Stats.CostToColonize;
-                s.CargoBays.First(cb => cb.ResourceType == ResourceType.Metal && cb.Quantity >= 10).Quantity -= 10;
-                s.CargoBays.First(cb => cb.ResourceType == ResourceType.Organics && cb.Quantity >= 10).Quantity -= 10;
-                s.CargoBays.First(cb => cb.ResourceType == ResourceType.Uranium && cb.Quantity >= 10).Quantity -= 10;
-                s.CargoBays.First(cb => cb.ResourceType == ResourceType.Water && cb.Quantity >= 10).Quantity -= 10;
+                Config.CostToColonize *= 2;
                 IsColonized = true;
-                var c = new Colony("My Colony", this);
+
+                //s.CargoBays.First(cb => cb.ResourceType == ResourceType.Metals && cb.Quantity >= 10).Quantity -= 10;
+                //s.CargoBays.First(cb => cb.ResourceType == ResourceType.Organics && cb.Quantity >= 10).Quantity -= 10;
+                //s.CargoBays.First(cb => cb.ResourceType == ResourceType.Uranium && cb.Quantity >= 10).Quantity -= 10;
+                //s.CargoBays.First(cb => cb.ResourceType == ResourceType.Water && cb.Quantity >= 10).Quantity -= 10;
+
+                Sector.ColoniesThisSector++;
+                var c = new Colony(Sector.Name + "-" + names[Sector.ColoniesThisSector % names.Length], this);
                 gs.AddPlayerColony(c);
                 gs.Select(c);
                 ifSuccess?.Invoke(c);
@@ -85,5 +90,12 @@ namespace Abyss
         {
 
         }
+
+        public string[] names = new string[]
+        {
+            "One", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+            "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
+            "twenty"
+        };
     }
 }

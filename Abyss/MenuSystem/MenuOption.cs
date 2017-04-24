@@ -10,17 +10,22 @@ namespace Abyss.MenuSystem
         public Action<MenuControl> Action { get; set; }
         public bool IsCancel { get; }
         public bool JustText { get; }
-        public MenuOption(string text, Action<MenuControl> action, Color? color = null, bool isCancel = false, bool justText = false)
+        public bool IsEnabled { get; }
+        public MenuOption(string text, Action<MenuControl> action, Color? color = null, bool isCancel = false, bool justText = false, bool enabled = true)
         {
             this.Text = text;
             this.Action = action;
             this.Color = color ?? GameColors.Foreground;
             this.IsCancel = isCancel;
             this.JustText = justText;
+            this.IsEnabled = enabled;
         }
 
         internal void Invoke(MenuControl mc)
         {
+            if (!IsEnabled)
+                return;
+
             if (!JustText) Action.Invoke(mc);
         }
     }

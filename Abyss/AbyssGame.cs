@@ -58,7 +58,7 @@ namespace Abyss
             GraphicsDevice.Clear(GameColors.Background);
             _sf.Render(_sb);
             _gs.Render(_sb);
-            _sbc.Render(_sb);
+            _sbc.Render(_sb, _gs);
             _menuControl.Render(_sb);
         }
     }

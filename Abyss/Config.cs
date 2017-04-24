@@ -13,6 +13,10 @@ namespace Abyss
         public const int SectorHeight = 30;
         public static int NumSectors = 9;
         public static Vector2 CellSize { get; } = new Vector2(72, 72);
+        public static int CostToSurvey = 20;
+
+        public static int CostToColonize = 20;
+
         public static Point ShipEntryPoint = new Point(Config.SectorWidth / 2, Config.SectorHeight / 2);
 
         public static int NumDataSectionLines = 100;

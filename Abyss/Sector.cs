@@ -22,9 +22,7 @@ namespace Abyss
 
         public IEnumerable<Ship> ShipsInSector => _shipsInThisSector;
 
-        private List<Colony> _coloniesThisSector = new List<Colony>();
-
-        public IEnumerable<Colony> ColoniesThisSector => _coloniesThisSector;
+        public int ColoniesThisSector = 0;
 
         public Sector(int number)
         {
@@ -36,13 +34,16 @@ namespace Abyss
             for (int y = 0; y < Config.SectorHeight; y++)
                 for (int x = 0; x < Config.SectorWidth; x++)
                 {
-                    if (y == Config.SectorHeight / 2 && x == Config.SectorWidth / 2)
+                    if ((y == Config.SectorHeight / 2 && x == Config.SectorWidth / 2) ||
+                        (y == Config.SectorHeight / 2 && x == (Config.SectorWidth / 2) + 1))
                         continue;
 
                     var spawnPlanet = Config.R.Next(0, 100) == 50;
                     if (!spawnPlanet) continue;
                     Cells[x, y] = new Cell(Planet.Random(new Point(x, y), this));
                 }
+
+            Cells[Config.ShipEntryPoint.X + 1, Config.ShipEntryPoint.Y] = new Cell(new Store(new Point(Config.ShipEntryPoint.X + 1, Config.ShipEntryPoint.Y)));
         }
 
         internal void AddShip(Ship ship) =>

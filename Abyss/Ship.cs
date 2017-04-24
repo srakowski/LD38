@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Abyss.Infrastructure;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Abyss
 {
@@ -32,6 +33,8 @@ namespace Abyss
 
         public CargoBay[] CargoBays { get; }
 
+        public List<int> Inventory { get; } = new List<int>();
+
         public Ship(string name, ShipType shipType, GameState gs, int cargoBays)
         {
             Name = name;
@@ -46,7 +49,7 @@ namespace Abyss
         {
             var s = new Ship(RandomShipName, ShipType.SmallTrading, gs, 4);
 
-            s.CargoBays[0].ResourceType = ResourceType.Metal;
+            s.CargoBays[0].ResourceType = ResourceType.Metals;
             s.CargoBays[0].Quantity = 50;
 
             s.CargoBays[1].ResourceType = ResourceType.Organics;
@@ -76,6 +79,7 @@ namespace Abyss
 
         public void ActionUp()
         {
+            GameState.Credits++;
             var newPos = Position;
             newPos.Y--;
             TryMove(newPos);
@@ -83,6 +87,7 @@ namespace Abyss
 
         public void ActionDown()
         {
+            GameState.Credits++;
             var newPos = Position;
             newPos.Y++;
             TryMove(newPos);
@@ -90,6 +95,7 @@ namespace Abyss
 
         public void ActionLeft()
         {
+            GameState.Credits++;
             var newPos = Position;
             newPos.X--;
             TryMove(newPos);
@@ -97,6 +103,7 @@ namespace Abyss
 
         public void ActionRight()
         {
+            GameState.Credits++;
             var newPos = Position;
             newPos.X++;
             TryMove(newPos);
@@ -115,6 +122,12 @@ namespace Abyss
                 return;
             }
             this.Position = newPos;
+        }
+
+        internal void AddInventory(int v)
+        {
+            if (Inventory.Count < 10)
+                Inventory.Add(v);
         }
 
         public static string RandomShipName => $"the {_firsts[Config.R.Next(0, _firsts.Length)]} {lasts[Config.R.Next(0, lasts.Length)]}";
@@ -227,6 +240,8 @@ namespace Abyss
 "third",
 "harsh",
 };
+
+
 
         private static readonly string[] lasts = new[]
         {

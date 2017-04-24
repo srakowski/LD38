@@ -28,6 +28,11 @@ namespace Abyss.Menus
 
         public static MenuOption EmptyMenuOption => new MenuOption("Empty", mc => mc.PopMenu(), justText: true);
 
+        internal static string FormatValue(string v, object p)
+        {
+            throw new NotImplementedException();
+        }
+
         public static Action<MenuControl> Confirm(string prompt, Action<MenuControl> ifYes) =>
             mc => mc.PushMenu(new Menu(prompt, new[]
             {
@@ -42,5 +47,6 @@ namespace Abyss.Menus
             new Menu(title,
                 (t.Any() ? t.Select(c => new MenuOption(c.Name, onSelect(gs, c), justText: shouldJustText?.Invoke(c) ?? false)) : new[] { Common.EmptyMenuOption })
                 .Concat(new[] { Common.GoBackMenuOption() }));
+
     }
 }

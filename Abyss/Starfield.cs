@@ -55,9 +55,13 @@ namespace Abyss
                 for (int i = 0; i < Stars.Length; i++)
                 {
                     var oldPos = Stars[i].Position;
-                    var newPos = oldPos + (direction * (Delta.Value * (Stars[i].Color.A / 256f) * Camera.MoveSpeed));
-                    newPos.X = newPos.X % Config.ViewportWidth;
-                    newPos.Y = newPos.Y % Config.ViewportHeight;
+                    var newPos = oldPos + (direction * (Delta.Value * (Stars[i].Color.A / 256f) ));
+                    if (newPos.Y < 0) newPos.Y += Config.ViewportHeight;
+                    else if (newPos.Y > Config.ViewportHeight) newPos.Y -= Config.ViewportHeight;
+
+                    if (newPos.X < 0) newPos.X += Config.ViewportWidth;
+                    else if (newPos.X > Config.ViewportWidth) newPos.X -= Config.ViewportWidth;
+
                     Stars[i] = new Star(newPos, Stars[i].Color);
                 }
             }
